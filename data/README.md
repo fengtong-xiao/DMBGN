@@ -1,7 +1,12 @@
 ## Introduction
-A randomly desensitized sampled dataset from one of the large-scaled production dataset from from Lazada (Alibaba Group) is included. The dataset contains three dataframes corresponding users' voucher collection logs, related user behavior logs and related item features.
+A randomly desensitized sampled dataset from one of the large-scaled production dataset from from Lazada (Alibaba Group) is included. The dataset contains three dataframes corresponding users' voucher collection logs, related user behavior logs and related item features stored in a pickle (.pkl) file .
 
-The dataset contains 3 dataframe stored in a pickle (.pkl) file which can be loaded with the following Python codes:
+To use the dataset, first unzip the file with command line:
+
+	cd ./data
+	unzip kdd_data.pkl.zip
+
+Then the dataframes can be loaded with the following Python codes from the pickle file:
 
 	import pickle
 	file_path = './data/kdd_data.pkl'
