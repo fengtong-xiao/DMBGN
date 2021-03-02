@@ -4,12 +4,28 @@ from torch_geometric.nn import GraphConv, TopKPooling, GatedGraphConv, GATConv, 
 from torch_geometric.nn import global_mean_pool as gap, global_max_pool as gmp
 from torch_geometric.utils import remove_self_loops, add_self_loops
 from .util import hash_func
-import numpy as np
+
 
 class VoucherGraphNet(torch.nn.Module):
+    """ User-behavior Graph (UVG) Network implementation
+
+    :param item_features: list of feature names to be used as item feature, same as in VoucherGraphDataset
+    :param promotion_features: list of feature names to be used as promotion feature, same as in VoucherGraphDataset
+    :param emb_info: embedding information dictionary, key='feature name', value = tuple(embedding size, embedding dimension)
+    :param emb_dict: embedding tensor dictionary, key=action type ('atc', 'ord'), value = corresponding embedding tensor
+    :param gprefix: list of prefix string, i.e. ['b_', 'a_']
+    :param gactions: list of action type string, i.e. ['atc_', 'ord_'], the value should match emb_dict keys
+    :param conv_method: convolution method used in UVG network, i.e. GraphConv, GATConv, SAGEConv, etc
+    :param ratio: TopKPooling layer ratio parameter
+    :param gnn_layers: tuple=(number of layer, dimension of output UVG embedding dimension)
+    :param linear_layers: linear layer parameters for MLP layer in UVG network
+    :param device: training device, 'cpu' or 'torch:cuda'
+
+    :return: A VoucherGraphNet object representing UVG network
+    """
     def __init__(self, item_features,  promotion_features, emb_info, emb_dict,
-                 gprefix = ['b_', 'a_'], gactions = ['atc', 'ord'], 
-                 conv_method = GraphConv,  ratio = 0.9, gnn_layers = (2, 16), linear_layers = [], device='cpu') :
+                 gprefix=['b_', 'a_'], gactions=['atc', 'ord'],
+                 conv_method=GraphConv,  ratio=0.9, gnn_layers=(2, 16), linear_layers=[], device='cpu'):
         super(VoucherGraphNet, self).__init__()
         
         self.emb_dic = torch.nn.ModuleDict({
@@ -24,8 +40,8 @@ class VoucherGraphNet(torch.nn.Module):
             self.emb_dic[key] = torch.nn.Embedding(num_embeddings=item_size, embedding_dim=emb_size)   
         
         embed_dim = 0
-        for feat in promotion_features :
-            if feat in emb_info.keys() :
+        for feat in promotion_features:
+            if feat in emb_info.keys():
                 _, emb_size = emb_info[feat]
                 embed_dim += emb_size
         
@@ -56,7 +72,7 @@ class VoucherGraphNet(torch.nn.Module):
         self.hidden_units = hidden_units
         self.device = device
 
-    def gnn(self, gname, x, edge_index) :
+    def gnn(self, gname, x, edge_index):
         edge_index, _ = remove_self_loops(edge_index)
         batch_size = x.size(0)
         edge_index, _ = add_self_loops(edge_index, num_nodes=batch_size)
@@ -64,9 +80,9 @@ class VoucherGraphNet(torch.nn.Module):
         
         promotion_id = hash_func(x[0][0].unsqueeze(0), int(self.emb_dic[self.promotion_features[0]].weight.shape[0]))
         emb_promotion = self.emb_dic[self.promotion_features[0]](promotion_id).squeeze(1)
-        for ii in range(1, len(self.promotion_features)) :
+        for ii in range(1, len(self.promotion_features)):
             feat = self.promotion_features[ii]
-            if feat not in self.emb_info.keys() :
+            if feat not in self.emb_info.keys():
                 continue
             promotion_val = hash_func(x[0][ii].unsqueeze(0), int(self.emb_dic[feat].weight.shape[0]))
             emb_pro = self.emb_dic[feat](promotion_val)
@@ -78,15 +94,15 @@ class VoucherGraphNet(torch.nn.Module):
             dic_key = 'atc_emb'
         elif 'ord' in gname: 
             dic_key = 'ord_emb'
-        else :
+        else:
             dic_key = 'clk_emb'
             
-        item_ids = hash_func(x[1:][:,0], int(self.emb_dic[dic_key].weight.shape[0]))
+        item_ids = hash_func(x[1:][:, 0], int(self.emb_dic[dic_key].weight.shape[0]))
         emb_item = self.emb_dic[dic_key](item_ids).squeeze(1)
         
         for ii in range(1, len(self.item_features)):
             feat = self.item_features[ii]
-            if feat not in self.emb_info.keys() :
+            if feat not in self.emb_info.keys():
                 continue
             item_val = hash_func(x[1:][:,ii], int(self.emb_dic[feat].weight.shape[0]))
             emb_pro = self.emb_dic[feat](item_val)
@@ -110,10 +126,10 @@ class VoucherGraphNet(torch.nn.Module):
         promotion_id = None
         session_id = None 
         
-        for prefix in self.gprefix :
-            for actions in self.gactions :
+        for prefix in self.gprefix:
+            for actions in self.gactions:
                 gname = prefix + actions
-                if gname in data.keys() :
+                if gname in data.keys():
                     graph_info = data[gname]
                     x, p_id = self.gnn(gname, graph_info.x.to(self.device), 
                                        graph_info.edge_index.to(self.device))
@@ -121,7 +137,7 @@ class VoucherGraphNet(torch.nn.Module):
                     raw_promotion_id = graph_info.x.squeeze(1)[0][0]
                     session_id = graph_info.x.squeeze(1)[0][1]
                 else :
-                    x = torch.zeros(1, self.emb_dim * 2, dtype = torch.float).to(self.device)
+                    x = torch.zeros(1, self.emb_dim * 2, dtype=torch.float).to(self.device)
                 xx = x if xx is None else torch.cat([xx, x], dim=1) 
         if promotion_id is None :
             return None, None, None, None, None

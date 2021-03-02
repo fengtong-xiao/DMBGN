@@ -16,12 +16,11 @@ Reference:
     [1] Zhou G, Zhu X, Song C, et al. Deep interest network for click-through rate prediction[C]//Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. ACM, 2018: 1059-1068. (https://arxiv.org/pdf/1706.06978.pdf)
 """
 
-import torch.nn as nn
 from deepctr_torch.models.basemodel import BaseModel
 from deepctr_torch.inputs import *
 from deepctr_torch.layers import *
-
 from .util import HistAttentionSeqPoolingLayer
+
 
 class DIN(BaseModel):
     """Instantiates the Deep Interest Network architecture.
