@@ -47,7 +47,7 @@ To run the experiments, simply start a [jupyter notebook](https://jupyter.org/) 
 
 To use the DMBGN model, please refer to the code implementation in ./models/DMBGN.py.
 
-### Requirement
+### Minimum Requirement
 python: 3.7.1 <br>
 numpy: 1.19.5 <br>
 pandas 1.2.1 <br>
