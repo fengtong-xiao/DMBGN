@@ -1,5 +1,6 @@
-# DMBGN: Deep Multi-Behaviors Graph Network for Voucher Redemption Rate Prediction
-The implementation of the submitted paper "Deep Multi-Behaviors Graph Network for Voucher Redemption Rate Prediction" in [SIGKDD 2021](https://www.kdd.org/kdd2021/) Applied Data Science Track. 
+# DMBGN: Deep Multi-Behaviors Graph Networks for Voucher Redemption Rate Prediction
+
+The implementation of the accepted paper "Deep Multi-Behaviors Graph Networks for Voucher Redemption Rate Prediction" in [SIGKDD 2021](https://www.kdd.org/kdd2021/) Applied Data Science Track. 
 
 DMBGN utilizes a User-Behavior Voucher Graph (UVG) to extract complex user-voucher-item relationship and the attention mechanism to capture users' long-term voucher redemption preference. Experiments shows that DMBGN achieves 10%-16% relative AUC improvement over Deep Neural Networks (DNN), and 2% to 4% AUC improvement over Deep Interest Network (DIN).
 
@@ -72,7 +73,7 @@ What To Do
 
 Acknowledgment
 -------
-Out code implementation is developed based on the [Deep Interest Network (DIN)](https://deepctr-doc.readthedocs.io/en/latest/_modules/deepctr/models/din.html) codes from the DeepCTR package, with modification to fit DMBGN model architecture and multi-GPU usage.
+Our code implementation is developed based on the [Deep Interest Network (DIN)](https://deepctr-doc.readthedocs.io/en/latest/_modules/deepctr/models/din.html) codes from the DeepCTR package, with modification to fit DMBGN model architecture and multi-GPU usage.
 
 Reference
 -------
