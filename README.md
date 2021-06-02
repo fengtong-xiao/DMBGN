@@ -27,16 +27,16 @@ The experimental results on the public sample dataset are as follows:
 
 |      Model       |  AUC   | RelaImpr(DNN) | RelaImpr(DIN) | Logloss |
 | ---------------- | ------ | ------------- | ------------- | ------- |
-|       LR         | 0.7377 |     -9.07%    |    -14.52%    |  0.3897 |
-|       GBDT       | 0.7480 |     -5.10%    |    -10.78%    |  0.3841 |
-|       DNN        | 0.7614 |     0.00%     |     -5.99%    |  0.3783 |
-|       WDL        | 0.7708 |     3.63%     |     -2.58%    |  0.3719 |
-|       DIN        | 0.7780 |     6.37%     |     0.00%     |  0.3679 |
-| DMBGN-AvgPooling | 0.7794 |     6.89%     |     0.49%     |  0.3697 |
-| DMBGN-Pretrained | 0.7813 |     7.62%     |     1.17%     |  0.3663 |
-|      DMBGN       | 0.7865 |     9.63%     |     3.06%     |  0.3620 |
+|        LR        | 0.7377 |     -9.22%    |    -14.28%    |  0.3897 |
+|     xgBoost      | 0.7759 |     5.40%     |     -0.48%    |  0.3640 |
+|       DNN        | 0.7618 |     0.00%     |     -5.57%    |  0.3775 |
+|       WDL        | 0.7716 |     3.73%     |     -2.05%    |  0.3717 |
+|       DIN        | 0.7773 |     5.90%     |     0.00%     |  0.3688 |
+| DMBGN_AvgPooling | 0.7789 |     6.54%     |     0.61%     |  0.3684 |
+| DMBGN_Pretrained | 0.7804 |     7.11%     |     1.14%     |  0.3680 |
+|      DMBGN       | 0.7885 |     10.20%    |     4.06%     |  0.3616 |
 
-Note that this dataset is a random sample from dataset Region-C and the performance is different as in the submitted paper due to the smaller sample size. However, the conclusion from the experiment results is consistent with the submitted paper, where DMBGN achieves 9.6% relative AUC improvement over DNN and 3.1% uplift over DIN. 
+Note that this dataset is a random sample from dataset Region-C and the performance is different as in the submitted paper due to the smaller sample size (especially xgBoost). However, the conclusion from the experiment results is consistent with the submitted paper, where DMBGN achieves 10.20% relative AUC improvement over DNN and 4.6% uplift over DIN. 
 
 ![image info](./figure/ROC.png)
 
@@ -44,7 +44,7 @@ How To Use
 -------
 All experiment codes are organized into the DMBGN_SIGKDD21-release.ipynb jupyter notebook including corresponding running logs, detail code implementation of each model (LR, GBDT, DNN, WDL, DIN, DMBGN) can be found in ./models folder. 
 
-To run the experiments, simply start a [jupyter notebook](https://jupyter.org/) and run all code cells in the DMBGN_SIGKDD21-release.ipynb file and check the output logs. Alternatively, you can refer to the existing log outputs in the notebook file.
+To run the experiments, simply start a [jupyter notebook](https://jupyter.org/) and run all code cells in the DMBGN_SIGKDD21-release.ipynb file and check the output logs. Alternatively, you can refer to the existing log outputs in the notebook file. (If you encounter "Sorry, something went wrong. Roload?" error message, just click Reload and the notebook will show.)
 
 To use the DMBGN model, please refer to the code implementation in ./models/DMBGN.py.
 
@@ -74,6 +74,8 @@ What To Do
 Acknowledgment
 -------
 Our code implementation is developed based on the [Deep Interest Network (DIN)](https://deepctr-doc.readthedocs.io/en/latest/_modules/deepctr/models/din.html) codes from the DeepCTR package, with modification to fit DMBGN model architecture and multi-GPU usage.
+
+We thanks the anonymous reviewers for their time and feedback.
 
 Reference
 -------
